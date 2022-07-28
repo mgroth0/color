@@ -1,10 +1,13 @@
 {
-    "modType": "NO_NATIVE",
+    "modType": {
+        "type": "matt.klib.mod.NO_NATIVE"
+    },
     "dependencies": [
         {
             "type": "matt.mstruct.BuildJsonProjectDependency",
             "cfg": "commonMainImplementation",
             "path": ":k:klib"
         }
-    ]
+    ],
+    "note": null
 }

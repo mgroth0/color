@@ -1,6 +1,6 @@
 package matt.color
 
-import matt.klib.str.upper
+import matt.prim.str.upper
 
 typealias AColor = java.awt.Color
 

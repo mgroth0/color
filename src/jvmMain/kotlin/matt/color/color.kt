@@ -1,5 +1,6 @@
 package matt.color
 
+import matt.color.name.ColorUtils
 import matt.prim.str.upper
 
 typealias AColor = java.awt.Color
@@ -19,3 +20,6 @@ fun AColor.mostContrastingForMe(): AColor {
 }
 
 fun getAwtColor(name: String) = AColor::class.java.getField(name.upper()).get(null) as AColor
+
+
+fun AColor.findName() = ColorUtils.getColorNameFromColor(this)

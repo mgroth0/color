@@ -10,10 +10,7 @@ import java.awt.Color
  *
  * @author Xiaoxiao Li
  */
-class ColorUtils() {
-  /**
-   * Initialize the color list that we have.
-   */
+object ColorUtils {
   private fun initColorList(): ArrayList<ColorName> {
 	val colorList = ArrayList<ColorName>()
 	colorList.add(ColorName("AliceBlue", 0xF0, 0xF8, 0xFF))
@@ -159,6 +156,8 @@ class ColorUtils() {
 	return colorList
   }
 
+  private val colorList by lazy { initColorList() }
+
   /**
    * Get the closest color name from our list
    *
@@ -168,7 +167,7 @@ class ColorUtils() {
    * @return
    */
   fun getColorNameFromRgb(r: Int, g: Int, b: Int): String {
-	val colorList = initColorList()
+
 	var closestMatch: ColorName? = null
 	var minMSE = Int.MAX_VALUE
 	var mse: Int
@@ -214,11 +213,11 @@ class ColorUtils() {
   }
 
   /**
-   * SubClass of matt.color.name.ColorUtils. In order to lookup color name
+   * SubClass of ColorUtils. In order to lookup color name
    *
    * @author Xiaoxiao Li
    */
-  inner class ColorName(var name: String, var r: Int, var g: Int, var b: Int) {
+  private class ColorName(var name: String, var r: Int, var g: Int, var b: Int) {
 
 	fun computeMSE(pixR: Int, pixG: Int, pixB: Int): Int {
 	  return ((((pixR - r)*(pixR - r)) + ((pixG - g)*(pixG - g)) + (((pixB - b)

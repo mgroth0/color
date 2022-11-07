@@ -23,3 +23,20 @@ fun getAwtColor(name: String) = AColor::class.java.getField(name.upper()).get(nu
 
 
 fun AColor.findName() = ColorUtils.getColorNameFromColor(this)
+
+fun AColor.copy(
+  r: Float? = null,
+  g: Float? = null,
+  b: Float? = null,
+  a: Float? = null
+): AColor {
+  val components by lazy {
+	getRGBComponents(null)
+  }
+  return AColor(
+	r ?: components[0],
+	g ?: components[1],
+	b ?: components[2],
+	a ?: components[3]
+  )
+}

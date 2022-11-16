@@ -40,3 +40,17 @@ fun AColor.copy(
 	a ?: components[3]
   )
 }
+
+
+fun colorMap(numColors: Int): Map<Int, AColor> {
+  val hueStep = (1.0/numColors)
+  return List(numColors) {
+
+
+	/*val hue = it*hueStep*360*/ /*this is only for FXColor*/
+	val hue = it * hueStep
+
+
+	AColor.getHSBColor(hue.toFloat(), 0.5.toFloat(), 1.0.toFloat())
+  }.withIndex().associate { it.index to it.value }
+}

@@ -9,10 +9,14 @@ actual typealias Color = java.awt.Color
 
 fun AColor.hex() = kotlin.String.format("#%02x%02x%02x", this.red, green, blue)
 
-fun awtColor(r: Int, g: Int, b: Int) = AColor(r, g, b)
+fun rgbToAwtColor(r: Int, g: Int, b: Int) = AColor(r, g, b)
+
+fun hexToAwtColor(hex: String): AColor {
+  return Color.decode(hex)
+}
 
 fun AColor.mostContrastingForMe(): AColor {
-  return awtColor(
+  return rgbToAwtColor(
 	r = if (red >= 128) 0 else 255,
 	g = if (green >= 128) 0 else 255,
 	b = if (blue >= 128) 0 else 255
@@ -48,7 +52,7 @@ fun colorMap(numColors: Int): Map<Int, AColor> {
 
 
 	/*val hue = it*hueStep*360*/ /*this is only for FXColor*/
-	val hue = it * hueStep
+	val hue = it*hueStep
 
 
 	AColor.getHSBColor(hue.toFloat(), 0.5.toFloat(), 1.0.toFloat())

@@ -7,7 +7,7 @@ typealias AColor = java.awt.Color
 
 actual typealias Color = java.awt.Color
 
-fun AColor.hex() = kotlin.String.format("#%02x%02x%02x", this.red, green, blue)
+fun AColor.hex() = kotlin.String.format("#%02x%02x%02x%02x", this.red, green, blue,alpha)
 
 fun rgbToAwtColor(r: Int, g: Int, b: Int) = AColor(r, g, b)
 

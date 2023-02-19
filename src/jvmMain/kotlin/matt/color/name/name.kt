@@ -178,11 +178,7 @@ object ColorUtils {
 		closestMatch = c
 	  }
 	}
-	return if (closestMatch != null) {
-	  closestMatch.name
-	} else {
-	  "No matched color name."
-	}
+	return closestMatch!!.name
   }
 
   /**

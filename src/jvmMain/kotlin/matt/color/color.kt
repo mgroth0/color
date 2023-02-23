@@ -2,12 +2,14 @@ package matt.color
 
 import matt.color.name.ColorUtils
 import matt.prim.str.upper
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 typealias AColor = java.awt.Color
 
 actual typealias Color = java.awt.Color
 
-fun AColor.hex() = kotlin.String.format("#%02x%02x%02x%02x", this.red, green, blue,alpha)
+fun AColor.hex() = String.format("#%02x%02x%02x%02x", this.red, green, blue, alpha)
 
 fun rgbToAwtColor(r: Int, g: Int, b: Int) = AColor(r, g, b)
 
@@ -58,3 +60,6 @@ fun colorMap(numColors: Int): Map<Int, AColor> {
 	AColor.getHSBColor(hue.toFloat(), 0.5.toFloat(), 1.0.toFloat())
   }.withIndex().associate { it.index to it.value }
 }
+
+fun Random.nextColor() = nextRandomColor(this)
+fun nextRandomColor(rand: Random = Random) = java.awt.Color(rand.nextInt(0..255), rand.nextInt(0..255), rand.nextInt(0..255))

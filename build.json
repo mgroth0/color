@@ -1,11 +1,12 @@
 {
-  "type" :         "MultiPlatformModule", "jvm": {}, "js": "LIB",
-  "dependencies" : [
+  "type": "MultiPlatformModule",
+  "jvm": {},
+  "js": "LIB",
+  "dependencies": [
     {
-      "type" : "Project",
-      "cfg" :  "commonMainApi",
-      "path" : ":k:prim"
+      "type": "Project",
+      "cfg": "commonMainApi",
+      "path": ":k:prim"
     }
-  ],
-  "note" :         null
+  ]
 }

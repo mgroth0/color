@@ -1,12 +1,24 @@
 {
   "type": "MultiPlatformModule",
   "jvm": {},
-  "js": {"type":"lib"},
+  "js": {
+    "type": "lib"
+  },
   "dependencies": [
     {
       "type": "Project",
       "cfg": "commonMainApi",
       "path": ":k:prim"
+    },
+    {
+      "type": "Project",
+      "cfg": "commonMainApi",
+      "path": ":k:lang"
+    },
+    {
+      "type": "Lib",
+      "cfg": "commonMainApi",
+      "key": "kotlinx-serialization-core"
     }
   ]
 }

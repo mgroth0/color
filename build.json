@@ -1,9 +1,5 @@
 {
   "type": "MultiPlatformModule",
-  "jvm": {},
-  "js": {
-    "type": "lib"
-  },
   "dependencies": [
     {
       "type": "Project",
@@ -19,6 +15,15 @@
       "type": "Lib",
       "cfg": "commonMainApi",
       "key": "kotlinx-serialization-core"
+    },
+    {
+      "type": "Project",
+      "cfg": "jvmTestImplementation",
+      "path": ":k:test"
     }
-  ]
+  ],
+  "jvm": {},
+  "js": {
+    "type": "lib"
+  }
 }

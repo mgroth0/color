@@ -51,8 +51,13 @@ fun rgb(
     b: Int,
     a: Int? = null
 ) = if (a != null)
-    IntColor(r.requireIsUByte(), g.requireIsUByte(), b.requireIsUByte(), a.requireIsUByte())
-else IntColor(r.requireIsUByte(), g.requireIsUByte(), b.requireIsUByte())
+    IntColor(
+        red = r.requireIsUByte(),
+        green = g.requireIsUByte(),
+        blue = b.requireIsUByte(),
+        alpha = a.requireIsUByte()
+    )
+else IntColor(red = r.requireIsUByte(), green = g.requireIsUByte(), blue = b.requireIsUByte())
 
 
 /*could be encoded as a single Integer if I wanted to increase performance*/

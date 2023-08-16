@@ -5,7 +5,6 @@ package matt.color
 import matt.lang.require.requireEquals
 import matt.lang.require.requireIn
 import java.awt.Color
-import java.awt.Transparency
 import java.awt.color.ColorSpace
 
 typealias AwtColor = java.awt.Color
@@ -24,16 +23,10 @@ private val CS_SRGB: ColorSpace by lazy {
 fun Color.toMColor(): IntColor {
     return when (colorSpace) {
         CS_SRGB -> {
-            requireEquals(this.transparency, Transparency.OPAQUE)
+            /*requireEquals(this.transparency, Transparency.OPAQUE)*/
             val components = this.getColorComponents(null)
             requireIn(CS_SRGB.numComponents, 3..4)
-            require(CS_SRGB.numComponents == components.size)
-//            println("red=${components[0]}")
-//            println("green=${components[1]}")
-//            println("blue=${components[2]}")
-//            if (components.size == 4) {
-//                println("alpha=${components[3]}")
-//            }
+            requireEquals(CS_SRGB.numComponents, components.size)
             rgb(
                 r = red,
                 b = blue,

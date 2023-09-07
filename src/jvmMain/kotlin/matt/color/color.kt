@@ -23,6 +23,7 @@ private val CS_SRGB: ColorSpace by lazy {
 fun Color.toMColor(): IntColor {
     return when (colorSpace) {
         CS_SRGB -> {
+
             /*requireEquals(this.transparency, Transparency.OPAQUE)*/
             val components = this.getColorComponents(null)
             requireIn(CS_SRGB.numComponents, 3..4)
@@ -62,7 +63,7 @@ fun AColor.copy(
 */
 
 
-fun colorMap(numColors: Int): Map<Int, Color> {
+fun colorMap(numColors: Int): Map<Int, IntColor> {
     val hueStep = (1.0 / numColors)
     return List(numColors) {
 
@@ -71,7 +72,7 @@ fun colorMap(numColors: Int): Map<Int, Color> {
         val hue = it * hueStep
 
 
-        Color.getHSBColor(hue.toFloat(), 0.5.toFloat(), 1.0.toFloat())
+        Color.getHSBColor(hue.toFloat(), 0.5.toFloat(), 1.0.toFloat()).toMColor()
     }.withIndex().associate { it.index to it.value }
 
 }

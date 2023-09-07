@@ -1,11 +1,12 @@
 package matt.color
 
 import kotlinx.serialization.Serializable
-import matt.lang.require.requireEquals
 import matt.lang.require.requireIn
-import matt.lang.require.requireStartsWith
+import matt.lang.require.requireZero
 import matt.lang.safeconvert.requireIsUByte
+import matt.lang.safeconvert.requireIsUInt
 import matt.prim.str.mybuild.string
+import kotlin.jvm.JvmInline
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -33,41 +34,76 @@ interface ColorBase : ColorLike {
     val hasDefaultAlpha get() = alpha == max
 }
 
+//
+//fun hexToColor(hex: Long): IntColor {
+//    require(hex <= 0xFF_FF_FF_FF)
+//    val component1 = hex shr 24
+//    val component2 = hex shr 16 and 0xFF
+//    val component3 = hex shr 8 and 0xFF
+//    val component4 = hex and 0xFF
+//    return rgb(
+//        component1,
+//        component2,
+//        component3,
+//        component4
+//    )
+//    /*return Color.decode(hex)*/
+//}
 
-fun hexToColor(hex: String): IntColor {
-    requireStartsWith(hex, "#")
-    requireEquals(hex.length, 7)
+
+fun rgb(hex: Int): IntColor {
+    requireZero(hex shr 24)
+    IntColor(((hex shl 8) or 0xFF).toUInt())
+    val component1 = hex shr 24
+    val component2 = hex shr 16 and 0xFF
+    val component3 = hex shr 8 and 0xFF
+    val component4 = hex and 0xFF
     return rgb(
-        hex[1].digitToInt(16) * 16 + hex[2].digitToInt(16),
-        hex[3].digitToInt(16) * 16 + hex[4].digitToInt(16),
-        hex[5].digitToInt(16) * 16 + hex[5].digitToInt(16)
+        component1,
+        component2,
+        component3,
+        component4
     )
     /*return Color.decode(hex)*/
+
 }
 
 fun rgb(
     r: Int,
     g: Int,
     b: Int,
-    a: Int? = null
-) = if (a != null)
+    a: Int = UByte.MAX_VALUE.toInt()
+) = run {
+    r.requireIsUByte()
+    g.requireIsUByte()
+    b.requireIsUByte()
+    a.requireIsUByte()
     IntColor(
-        red = r.requireIsUByte(),
-        green = g.requireIsUByte(),
-        blue = b.requireIsUByte(),
-        alpha = a.requireIsUByte()
+
+        ((r shl 24) or (g shl 16) or (b shl 8) or a).toUInt()
+
+//                red = r . requireIsUByte (),
+//        green = g.requireIsUByte(),
+//        blue = b.requireIsUByte(),
+//        alpha = a.requireIsUByte()
     )
-else IntColor(red = r.requireIsUByte(), green = g.requireIsUByte(), blue = b.requireIsUByte())
+}//  else IntColor(red = r.requireIsUByte(), green = g.requireIsUByte(), blue = b.requireIsUByte())
 
 
-/*could be encoded as a single Integer if I wanted to increase performance*/
+@JvmInline
 @Serializable
-data class IntColor(
-    override val red: UByte,
-    override val blue: UByte,
-    override val green: UByte,
-    override val alpha: UByte = MAX
+value class IntColor(
+    val data: UInt
 ) : ColorBase {
+
+    constructor(data: Long) : this(data.requireIsUInt())
+
+
+    override val red get() = (data shr 24).toUByte()
+    override val green get() = (data shr 16 and 0xFFu).toUByte()
+    override val blue get() = (data shr 8 and 0xFFu).toUByte()
+    override val alpha get() = (data and 0xFFu).toUByte()
+
     override val max get() = MAX
 
     private companion object {
@@ -90,7 +126,12 @@ data class IntColor(
         append(green.asHex())
         append(blue.asHex())
     }
+
+    override fun toString(): String {
+        return "IntColor[data=$data](r=${red},g=${green},b=${blue},a=${alpha})"
+    }
 }
+
 
 @Serializable
 data class FloatColor(

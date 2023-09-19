@@ -7,11 +7,6 @@
       "path": ":k:prim"
     },
     {
-      "type": "Project",
-      "cfg": "commonMainApi",
-      "path": ":k:lang"
-    },
-    {
       "type": "Lib",
       "cfg": "commonMainApi",
       "key": "kotlinx-serialization-core"

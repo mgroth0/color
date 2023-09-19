@@ -5,7 +5,7 @@ import matt.lang.require.requireIn
 import matt.lang.require.requireZero
 import matt.lang.safeconvert.requireIsUByte
 import matt.lang.safeconvert.requireIsUInt
-import matt.prim.str.mybuild.string
+import matt.prim.str.mybuild.api.string
 import kotlin.jvm.JvmInline
 import kotlin.random.Random
 import kotlin.random.nextInt

@@ -2,8 +2,8 @@
 
 package matt.color
 
-import matt.lang.require.requireEquals
-import matt.lang.require.requireIn
+import matt.lang.assertions.require.requireEquals
+import matt.lang.assertions.require.requireIn
 import java.awt.Color
 import java.awt.color.ColorSpace
 

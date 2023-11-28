@@ -1,12 +1,13 @@
 package matt.color
 
 import kotlinx.serialization.Serializable
-import matt.lang.require.requireIn
-import matt.lang.require.requireZero
-import matt.lang.safeconvert.requireIsUByte
-import matt.lang.safeconvert.requireIsUInt
+import matt.lang.assertions.require.requireIn
+import matt.lang.assertions.require.requireZero
+import matt.lang.safeconvert.verifyToUByte
+import matt.lang.safeconvert.verifyToUInt
 import matt.prim.str.mybuild.api.string
 import kotlin.jvm.JvmInline
+import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -74,10 +75,10 @@ fun rgb(
     b: Int,
     a: Int = UByte.MAX_VALUE.toInt()
 ) = run {
-    r.requireIsUByte()
-    g.requireIsUByte()
-    b.requireIsUByte()
-    a.requireIsUByte()
+    r.verifyToUByte()
+    g.verifyToUByte()
+    b.verifyToUByte()
+    a.verifyToUByte()
     IntColor(
 
         ((r shl 24) or (g shl 16) or (b shl 8) or a).toUInt()
@@ -96,7 +97,7 @@ value class IntColor(
     val data: UInt
 ) : ColorBase {
 
-    constructor(data: Long) : this(data.requireIsUInt())
+    constructor(data: Long) : this(data.verifyToUInt())
 
 
     override val red get() = (data shr 24).toUByte()
@@ -152,6 +153,18 @@ data class FloatColor(
         requireIn(blue, VALID_RANGE)
         requireIn(green, VALID_RANGE)
         requireIn(alpha, VALID_RANGE)
+    }
+
+
+    fun toIntColor(): IntColor {
+        val d = UByte.MAX_VALUE.toInt()
+
+        return rgb(
+            r = (red * d).roundToInt(),
+            g = (green * d).roundToInt(),
+            b = (blue * d).roundToInt(),
+            a = (alpha * d).roundToInt(),
+        )
     }
 
 }

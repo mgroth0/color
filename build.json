@@ -20,5 +20,6 @@
   "jvm": {},
   "js": {
     "type": "lib"
-  }
+  },
+  "native": "LIB"
 }

@@ -11,14 +11,84 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-fun IntColor.mostContrastingForMe(): IntColor {
-    require(hasDefaultAlpha) {
-        "not ready"
-    }
-    return rgb(
-        r = if (red >= 128u) 0 else 255, g = if (green >= 128u) 0 else 255, b = if (blue >= 128u) 0 else 255
-    )
+fun IntColor.calculateContrastingColor(contrastor: ContrastAlgorithm): IntColor {
+    return contrastor.contrastingColorOf(this)
+
 }
+
+
+interface ContrastAlgorithm {
+    fun contrastingColorOf(input: IntColor): IntColor
+}
+
+
+object LetsTrySomethingMoreAdvanced : ContrastAlgorithm {
+    override fun contrastingColorOf(input: IntColor): IntColor = input.run {
+        require(hasDefaultAlpha) {
+            "not ready"
+        }
+        val yellow = (red + green) / 2u
+//        println("red=${red},green=${green},blue=${blue},yellow=$yellow")
+        return rgb(
+            r = when {
+                (red >= 128u) -> when {
+                    red <= 192u -> when {
+                        green >= 128u -> 255
+                        else          -> 0
+                    }
+                    else        -> 0
+                }
+                else          -> 255
+            },
+            g = when {
+                (green >= 128u) -> when {
+                    green <= 192u -> when {
+                        red >= 128u -> 255
+                        else          -> 0
+                    }
+                    else        -> 0
+                }
+                else          -> 255
+            },
+            b = when {
+                (blue >= 128u) -> when {
+                    blue <= 192u -> when {
+                        yellow >= 128u -> 255
+                        else          -> 0
+                    }
+                    else        -> 0
+                }
+                else          -> 255
+            }
+        )
+    }
+
+}
+
+object SimpleButOftenStupid : ContrastAlgorithm {
+    override fun contrastingColorOf(input: IntColor) = input.run {
+
+
+        require(hasDefaultAlpha) {
+            "not ready"
+        }
+        rgb(
+            r = when {
+                (red >= 128u) -> 0
+                else          -> 255
+            },
+            g = when {
+                (green >= 128u) -> 0
+                else            -> 255
+            },
+            b = when {
+                (blue >= 128u) -> 0
+                else           -> 255
+            }
+        )
+    }
+}
+
 
 interface ColorLike {
     val css: String

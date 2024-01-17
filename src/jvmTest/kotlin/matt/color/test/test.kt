@@ -3,12 +3,12 @@ package matt.color.test
 
 import matt.color.rgb
 import matt.color.toAwtColor
-import matt.test.assertions.JupiterTestAssertions.assertRunsInOneSecond
+import matt.test.Tests
 import java.awt.Color
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ColorTests {
+class ColorTests: Tests() {
     @Test
     fun placeholderTest() = assertRunsInOneSecond {
         assertEquals(

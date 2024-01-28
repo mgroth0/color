@@ -1,6 +1,7 @@
 package matt.color
 
 import kotlinx.serialization.Serializable
+import matt.lang.anno.Open
 import matt.lang.assertions.require.requireIn
 import matt.lang.assertions.require.requireZero
 import matt.lang.safeconvert.verifyToUByte
@@ -36,29 +37,35 @@ object LetsTrySomethingMoreAdvanced : ContrastAlgorithm {
                         green >= 128u -> 255
                         else          -> 0
                     }
+
                     else        -> 0
                 }
+
                 else          -> 255
             },
             g = when {
                 (green >= 128u) -> when {
                     green <= 192u -> when {
                         red >= 128u -> 255
-                        else          -> 0
+                        else        -> 0
                     }
-                    else        -> 0
+
+                    else          -> 0
                 }
-                else          -> 255
+
+                else            -> 255
             },
             b = when {
                 (blue >= 128u) -> when {
                     blue <= 192u -> when {
                         yellow >= 128u -> 255
-                        else          -> 0
+                        else           -> 0
                     }
-                    else        -> 0
+
+                    else         -> 0
                 }
-                else          -> 255
+
+                else           -> 255
             }
         )
     }
@@ -100,8 +107,11 @@ interface ColorBase : ColorLike {
     val blue: Any
     val alpha: Any
     val max: Any
+
+    @Open
     override val css: String get() = if (hasDefaultAlpha) "rgb($red,$green,$blue)" else "rgba($red,$green,$blue,$alpha)"
 
+    @Open
     val hasDefaultAlpha get() = alpha == max
 }
 

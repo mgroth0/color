@@ -20,26 +20,22 @@ private val CS_SRGB: ColorSpace by lazy {
     ColorSpace.getInstance(ColorSpace.CS_sRGB)
 }
 
-fun Color.toMColor(): IntColor {
-    return when (colorSpace) {
-        CS_SRGB -> {
+fun Color.toMColor(): IntColor = when (colorSpace) {
+    CS_SRGB -> {
 
-            /*requireEquals(this.transparency, Transparency.OPAQUE)*/
-            val components = this.getColorComponents(null)
-            requireIn(CS_SRGB.numComponents, 3..4)
-            requireEquals(CS_SRGB.numComponents, components.size)
-            rgb(
-                r = red,
-                b = blue,
-                g = green,
-                a = alpha
-            )
-        }
-
-        else    -> error("What should I do with colorspace: ${colorSpace}?")
+        /*requireEquals(this.transparency, Transparency.OPAQUE)*/
+        val components = this.getColorComponents(null)
+        requireIn(CS_SRGB.numComponents, 3..4)
+        requireEquals(CS_SRGB.numComponents, components.size)
+        rgb(
+            r = red,
+            b = blue,
+            g = green,
+            a = alpha
+        )
     }
 
-
+    else    -> error("What should I do with colorspace: $colorSpace?")
 }
 
 

@@ -12,10 +12,7 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-fun IntColor.calculateContrastingColor(contrastor: ContrastAlgorithm): IntColor {
-    return contrastor.contrastingColorOf(this)
-
-}
+fun IntColor.calculateContrastingColor(contrastor: ContrastAlgorithm): IntColor = contrastor.contrastingColorOf(this)
 
 
 interface ContrastAlgorithm {
@@ -208,9 +205,7 @@ value class IntColor(
         append(blue.asHex())
     }
 
-    override fun toString(): String {
-        return "IntColor[data=$data](r=${red},g=${green},b=${blue},a=${alpha})"
-    }
+    override fun toString(): String = "IntColor[data=$data](r=$red,g=$green,b=$blue,a=$alpha)"
 }
 
 

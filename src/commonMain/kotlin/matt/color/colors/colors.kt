@@ -2,7 +2,6 @@ package matt.color.colors
 
 import matt.color.IntColor
 
-
 object Colors {
     val Red = IntColor(0xFF_00_00_FF)
     val Green = IntColor(0x00_FF_00_FF)

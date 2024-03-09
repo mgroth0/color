@@ -1,4 +1,4 @@
-package matt.color
+package matt.color.common
 
 import kotlinx.serialization.Serializable
 import matt.lang.anno.Open
@@ -21,76 +21,88 @@ interface ContrastAlgorithm {
 
 
 object LetsTrySomethingMoreAdvanced : ContrastAlgorithm {
-    override fun contrastingColorOf(input: IntColor): IntColor = input.run {
-        require(hasDefaultAlpha) {
-            "not ready"
-        }
-        val yellow = (red + green) / 2u
-//        println("red=${red},green=${green},blue=${blue},yellow=$yellow")
-        return rgb(
-            r = when {
-                (red >= 128u) -> when {
-                    red <= 192u -> when {
-                        green >= 128u -> 255
-                        else          -> 0
-                    }
-
-                    else        -> 0
-                }
-
-                else          -> 255
-            },
-            g = when {
-                (green >= 128u) -> when {
-                    green <= 192u -> when {
-                        red >= 128u -> 255
-                        else        -> 0
-                    }
-
-                    else          -> 0
-                }
-
-                else            -> 255
-            },
-            b = when {
-                (blue >= 128u) -> when {
-                    blue <= 192u -> when {
-                        yellow >= 128u -> 255
-                        else           -> 0
-                    }
-
-                    else         -> 0
-                }
-
-                else           -> 255
+    override fun contrastingColorOf(input: IntColor): IntColor =
+        input.run {
+            require(hasDefaultAlpha) {
+                "not ready"
             }
-        )
-    }
+            val yellow = (red + green) / 2u
+            return rgb(
+                r =
+                    when {
+                        (red >= 128u) ->
+                            when {
+                                red <= 192u ->
+                                    when {
+                                        green >= 128u -> 255
+                                        else          -> 0
+                                    }
 
+                                else        -> 0
+                            }
+
+                        else          -> 255
+                    },
+                g =
+                    when {
+                        (green >= 128u) ->
+                            when {
+                                green <= 192u ->
+                                    when {
+                                        red >= 128u -> 255
+                                        else        -> 0
+                                    }
+
+                                else          -> 0
+                            }
+
+                        else            -> 255
+                    },
+                b =
+                    when {
+                        (blue >= 128u) ->
+                            when {
+                                blue <= 192u ->
+                                    when {
+                                        yellow >= 128u -> 255
+                                        else           -> 0
+                                    }
+
+                                else         -> 0
+                            }
+
+                        else           -> 255
+                    }
+            )
+        }
 }
 
 object SimpleButOftenStupid : ContrastAlgorithm {
-    override fun contrastingColorOf(input: IntColor) = input.run {
+    override fun contrastingColorOf(input: IntColor) =
+        input.run {
 
 
-        require(hasDefaultAlpha) {
-            "not ready"
-        }
-        rgb(
-            r = when {
-                (red >= 128u) -> 0
-                else          -> 255
-            },
-            g = when {
-                (green >= 128u) -> 0
-                else            -> 255
-            },
-            b = when {
-                (blue >= 128u) -> 0
-                else           -> 255
+            require(hasDefaultAlpha) {
+                "not ready"
             }
-        )
-    }
+            rgb(
+                r =
+                    when {
+                        (red >= 128u) -> 0
+                        else          -> 255
+                    },
+                g =
+                    when {
+                        (green >= 128u) -> 0
+                        else            -> 255
+                    },
+                b =
+                    when {
+                        (blue >= 128u) -> 0
+                        else           -> 255
+                    }
+            )
+        }
 }
 
 
@@ -112,23 +124,6 @@ interface ColorBase : ColorLike {
     val hasDefaultAlpha get() = alpha == max
 }
 
-//
-//fun hexToColor(hex: Long): IntColor {
-//    require(hex <= 0xFF_FF_FF_FF)
-//    val component1 = hex shr 24
-//    val component2 = hex shr 16 and 0xFF
-//    val component3 = hex shr 8 and 0xFF
-//    val component4 = hex and 0xFF
-//    return rgb(
-//        component1,
-//        component2,
-//        component3,
-//        component4
-//    )
-//    /*return Color.decode(hex)*/
-//}
-
-
 fun rgb(hex: Int): IntColor {
     requireZero(hex shr 24)
     IntColor(((hex shl 8) or 0xFF).toUInt())
@@ -143,7 +138,6 @@ fun rgb(hex: Int): IntColor {
         component4
     )
     /*return Color.decode(hex)*/
-
 }
 
 fun rgb(
@@ -160,12 +154,8 @@ fun rgb(
 
         ((r shl 24) or (g shl 16) or (b shl 8) or a).toUInt()
 
-//                red = r . requireIsUByte (),
-//        green = g.requireIsUByte(),
-//        blue = b.requireIsUByte(),
-//        alpha = a.requireIsUByte()
     )
-}//  else IntColor(red = r.requireIsUByte(), green = g.requireIsUByte(), blue = b.requireIsUByte())
+}
 
 
 @JvmInline
@@ -197,13 +187,14 @@ value class IntColor(
     }
 
     private fun UByte.asHex() = toString(16).padStart(2, '0')
-    fun hex() = string {
-        if (alpha != MAX) TODO("not ready for alpha in hex")
-        append("#")
-        append(red.asHex())
-        append(green.asHex())
-        append(blue.asHex())
-    }
+    fun hex() =
+        string {
+            if (alpha != MAX) TODO("not ready for alpha in hex")
+            append("#")
+            append(red.asHex())
+            append(green.asHex())
+            append(blue.asHex())
+        }
 
     override fun toString(): String = "IntColor[data=$data](r=$red,g=$green,b=$blue,a=$alpha)"
 }
@@ -238,10 +229,9 @@ data class FloatColor(
             r = (red * d).roundToInt(),
             g = (green * d).roundToInt(),
             b = (blue * d).roundToInt(),
-            a = (alpha * d).roundToInt(),
+            a = (alpha * d).roundToInt()
         )
     }
-
 }
 
 fun Random.nextColor() = nextRandomColor(this)

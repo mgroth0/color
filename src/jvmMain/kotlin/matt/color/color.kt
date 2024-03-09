@@ -1,45 +1,47 @@
-@file:JvmName("ColorJvmKt")
 
 package matt.color
 
+import matt.color.common.IntColor
+import matt.color.common.rgb
 import matt.lang.assertions.require.requireEquals
 import matt.lang.assertions.require.requireIn
-import java.awt.Color
 import java.awt.color.ColorSpace
+import java.awt.Color as AwtColor
 
-typealias AwtColor = java.awt.Color
+typealias AwtColor = AwtColor
 
-fun IntColor.toAwtColor() = Color(
-    red.toInt(),
-    green.toInt(),
-    blue.toInt(),
-    alpha.toInt()
-)
+fun IntColor.toAwtColor() =
+    AwtColor(
+        red.toInt(),
+        green.toInt(),
+        blue.toInt(),
+        alpha.toInt()
+    )
 
 private val CS_SRGB: ColorSpace by lazy {
     ColorSpace.getInstance(ColorSpace.CS_sRGB)
 }
 
-fun Color.toMColor(): IntColor = when (colorSpace) {
-    CS_SRGB -> {
+fun AwtColor.toMColor(): IntColor =
+    when (colorSpace) {
+        CS_SRGB -> {
 
-        /*requireEquals(this.transparency, Transparency.OPAQUE)*/
-        val components = this.getColorComponents(null)
-        requireIn(CS_SRGB.numComponents, 3..4)
-        requireEquals(CS_SRGB.numComponents, components.size)
-        rgb(
-            r = red,
-            b = blue,
-            g = green,
-            a = alpha
-        )
+            /*requireEquals(this.transparency, Transparency.OPAQUE)*/
+            val components = getColorComponents(null)
+            requireIn(CS_SRGB.numComponents, 3..4)
+            requireEquals(CS_SRGB.numComponents, components.size)
+            rgb(
+                r = red,
+                b = blue,
+                g = green,
+                a = alpha
+            )
+        }
+
+        else    -> error("What should I do with colorspace: $colorSpace?")
     }
 
-    else    -> error("What should I do with colorspace: $colorSpace?")
-}
 
-
-/*fun getAwtColor(name: String) = AColor::class.java.getField(name.upper()).get(null) as AColor*/
 
 
 /*
@@ -64,13 +66,14 @@ fun colorMap(numColors: Int): Map<Int, IntColor> {
     return List(numColors) {
 
 
-        /*val hue = it*hueStep*360*/ /*this is only for FXColor*/
+        /*val hue = it*hueStep*360
+
+        this is only for FXColor*/
         val hue = it * hueStep
 
 
-        Color.getHSBColor(hue.toFloat(), 0.5.toFloat(), 1.0.toFloat()).toMColor()
+        AwtColor.getHSBColor(hue.toFloat(), 0.5.toFloat(), 1.0.toFloat()).toMColor()
     }.withIndex().associate { it.index to it.value }
-
 }
 
 

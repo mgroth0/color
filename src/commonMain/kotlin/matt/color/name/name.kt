@@ -1,7 +1,7 @@
 package matt.color.name
 
-import matt.color.IntColor
-import matt.color.rgb
+import matt.color.common.IntColor
+import matt.color.common.rgb
 import matt.prim.str.lower
 
 fun IntColor.findName() = ColorUtils.getColorNameFromColor(this)
@@ -171,7 +171,7 @@ object ColorUtils {
             rgb(
                 it.r,
                 it.g,
-                it.b,
+                it.b
             )
         }
     }
@@ -187,7 +187,7 @@ object ColorUtils {
     fun getColorNameFromRgb(
         r: Int,
         g: Int,
-        b: Int,
+        b: Int
     ): String {
         var closestMatch: ColorName? = null
         var minMSE = Int.MAX_VALUE
@@ -223,11 +223,12 @@ object ColorUtils {
         )
       }*/
 
-    fun getColorNameFromColor(color: IntColor): String = getColorNameFromRgb(
-        color.red.toInt(),
-        color.green.toInt(),
-        color.blue.toInt(),
-    )
+    fun getColorNameFromColor(color: IntColor): String =
+        getColorNameFromRgb(
+            color.red.toInt(),
+            color.green.toInt(),
+            color.blue.toInt()
+        )
 
     /**
      * SubClass of ColorUtils. In order to lookup color name
@@ -238,12 +239,12 @@ object ColorUtils {
         var name: String,
         var r: Int,
         var g: Int,
-        var b: Int,
+        var b: Int
     ) {
         fun computeMSE(
             pixR: Int,
             pixG: Int,
-            pixB: Int,
+            pixB: Int
         ): Int = (
             (
                 ((pixR - r) * (pixR - r)) + ((pixG - g) * (pixG - g)) + (

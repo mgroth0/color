@@ -1,6 +1,6 @@
 package matt.color.colors
 
-import matt.color.IntColor
+import matt.color.common.IntColor
 
 object Colors {
     val Red = IntColor(0xFF_00_00_FF)

@@ -12,97 +12,40 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-fun IntColor.calculateContrastingColor(contrastor: ContrastAlgorithm): IntColor = contrastor.contrastingColorOf(this)
+fun parseColor(input: String): IntColor {
 
 
-interface ContrastAlgorithm {
-    fun contrastingColorOf(input: IntColor): IntColor
-}
 
+    val cleaned = input.trim()
 
-object LetsTrySomethingMoreAdvanced : ContrastAlgorithm {
-    override fun contrastingColorOf(input: IntColor): IntColor =
-        input.run {
-            require(hasDefaultAlpha) {
-                "not ready"
-            }
-            val yellow = (red + green) / 2u
-            return rgb(
-                r =
-                    when {
-                        (red >= 128u) ->
-                            when {
-                                red <= 192u ->
-                                    when {
-                                        green >= 128u -> 255
-                                        else          -> 0
-                                    }
-
-                                else        -> 0
-                            }
-
-                        else          -> 255
-                    },
-                g =
-                    when {
-                        (green >= 128u) ->
-                            when {
-                                green <= 192u ->
-                                    when {
-                                        red >= 128u -> 255
-                                        else        -> 0
-                                    }
-
-                                else          -> 0
-                            }
-
-                        else            -> 255
-                    },
-                b =
-                    when {
-                        (blue >= 128u) ->
-                            when {
-                                blue <= 192u ->
-                                    when {
-                                        yellow >= 128u -> 255
-                                        else           -> 0
-                                    }
-
-                                else         -> 0
-                            }
-
-                        else           -> 255
-                    }
-            )
-        }
-}
-
-object SimpleButOftenStupid : ContrastAlgorithm {
-    override fun contrastingColorOf(input: IntColor) =
-        input.run {
-
-
-            require(hasDefaultAlpha) {
-                "not ready"
-            }
+    return when {
+        cleaned.startsWith("#") -> {
+            val cleanedHex = cleaned.removePrefix("#")
+            val normalizedHexInput =
+                when (val l = cleanedHex.length) {
+                    3 ->
+                        buildString {
+                            append(cleanedHex[0])
+                            append(cleanedHex[0])
+                            append(cleanedHex[1])
+                            append(cleanedHex[1])
+                            append(cleanedHex[2])
+                            append(cleanedHex[2])
+                        }
+                    6 -> cleanedHex
+                    else -> error("unsure how to parse hex with length of $l: $cleanedHex")
+                }
+            val r = normalizedHexInput.substring(0, 2).toInt(16)
+            val g = normalizedHexInput.substring(2, 4).toInt(16)
+            val b = normalizedHexInput.substring(4, 6).toInt(16)
             rgb(
-                r =
-                    when {
-                        (red >= 128u) -> 0
-                        else          -> 255
-                    },
-                g =
-                    when {
-                        (green >= 128u) -> 0
-                        else            -> 255
-                    },
-                b =
-                    when {
-                        (blue >= 128u) -> 0
-                        else           -> 255
-                    }
+                r = r,
+                g = g,
+                b = b
             )
         }
+        else -> error("how do I parse this color ?: $input")
+    }
 }
 
 
@@ -122,6 +65,8 @@ interface ColorBase : ColorLike {
 
     @Open
     val hasDefaultAlpha get() = alpha == max
+
+    fun invert(): ColorBase
 }
 
 fun rgb(hex: Int): IntColor {
@@ -140,20 +85,28 @@ fun rgb(hex: Int): IntColor {
     /*return Color.decode(hex)*/
 }
 
+
 fun rgb(
     r: Int,
     g: Int,
     b: Int,
     a: Int = UByte.MAX_VALUE.toInt()
-) = run {
-    r.verifyToUByte()
-    g.verifyToUByte()
-    b.verifyToUByte()
+) = rgb(
+    r.verifyToUByte(),
+    g.verifyToUByte(),
+    b.verifyToUByte(),
     a.verifyToUByte()
+)
+
+
+fun rgb(
+    r: UByte,
+    g: UByte,
+    b: UByte,
+    a: UByte = UByte.MAX_VALUE
+) = run {
     IntColor(
-
-        ((r shl 24) or (g shl 16) or (b shl 8) or a).toUInt()
-
+        ((r.toInt() shl 24) or (g.toInt() shl 16) or (b.toInt() shl 8) or a.toInt()).toUInt()
     )
 }
 
@@ -197,6 +150,11 @@ value class IntColor(
         }
 
     override fun toString(): String = "IntColor[data=$data](r=$red,g=$green,b=$blue,a=$alpha)"
+
+    override fun invert(): IntColor {
+        if (alpha != MAX) TODO()
+        return rgb(r = (MAX - red).toUByte(), g = (MAX - green).toUByte(), b = (MAX - blue).toUByte())
+    }
 }
 
 
@@ -208,6 +166,10 @@ data class FloatColor(
     override val alpha: Float = 1.0f
 ) : ColorBase {
     override val max get() = MAX
+    override fun invert(): FloatColor {
+        if (alpha != MAX) TODO()
+        return FloatColor(red = MAX - red, green = MAX - green, blue = MAX - blue)
+    }
 
     private companion object {
         const val MAX = 1f
@@ -237,3 +199,4 @@ data class FloatColor(
 fun Random.nextColor() = nextRandomColor(this)
 fun nextRandomColor(rand: Random = Random) =
     rgb(rand.nextInt(0..255), rand.nextInt(0..255), rand.nextInt(0..255))
+
